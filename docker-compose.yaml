@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  credence-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: credence-app
+    ports:
+      - "5002:80"
+    depends_on:
+      - mysql
+    environment:
+      ConnectionStrings__credenceConnection: "Server=mysql;Port=3306;Database=CredenceDb;User=root;Password=${DB_PASSWORD}"
+      JWTSettings__secretKey: ${JWT_SECRET}
+      Email__SmtpServer: ${SMTP_SMTPSERVER}
+      Email__UserName: ${SMTP_USERNAME}
+      Email__Password: ${SMTP_PASSWORD}
+      Email__DefaultFrom: ${SMTP_DEFAULTFROM}
+      Email__UseSsl: ${SMTP_USESSL}
+    networks:
+      - backend
+
+  mysql:
+    image: mysql:8.0
+    container_name: credence-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: CredenceDb
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - backend
+
+volumes:
+  mysql_data:
+
+networks:
+  backend:
+    driver: bridge

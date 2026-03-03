@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>38d38e5c-0b40-4566-8307-2f5863608f79</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+  <ItemGroup>    
+    <ProjectReference Include="../Credence.Infrastructure/Credence.Infrastructure.csproj" />
+    <ProjectReference Include="../Credence.Application/Credence.Application.csproj" />
+  </ItemGroup>
+</Project>

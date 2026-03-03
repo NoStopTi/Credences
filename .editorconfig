@@ -1,0 +1,12 @@
+﻿
+#controls how namespaces are declared. namespace xxx{} or namespace xxx;
+[*.cs]
+csharp_style_namespace_declarations = file_scoped:error
+#control remove unnecessary usings
+[*.cs]
+dotnet_remove_unnecessary_usings = true
+#highlighted as error unnecessary usings
+[*.cs]
+dotnet_diagnostic.IDE0005.severity = error
+
+#execute "dotnet format" using terminal in the folder of project

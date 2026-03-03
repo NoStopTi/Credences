@@ -1,0 +1,59 @@
+# ---- Arquivos sensíveis ----
+.env
+*.key
+*.pem
+dotnet-user-secrets.bat
+DockerConnect.ps1
+
+# ---- Logs ----
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ---- Angular Build ----
+dist/
+tmp/
+out-tsc/
+.angular/
+
+# ---- Node.js ----
+node_modules/
+
+# ---- VS Code / IDE ----
+.vscode/
+*.code-workspace
+.vs/
+.idea/
+
+# ---- Sistema Operacional ----
+.DS_Store
+Thumbs.db
+
+# ---- Docker ----
+*.pid
+*.seed
+*.bak
+
+# ---- .NET / C# ----
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.pdb
+*.mdb
+*.dbmdl
+*.ldf
+publish/
+
+# ---- Testes ----
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# ---- Outros ----
+*.swp
+*.tmp
