@@ -19,7 +19,6 @@ using Credence.Default.Constants.JwtContext;
 using Credence.Default.Constants.PasswordContext;
 using Credence.Default.Constants.UserContext;
 using Credence.Default.DomainContext.Entities.Constants.AuthContext;
-using Credence.Default.DomainContext.Entities.Constants.CompanyContext;
 using Credence.Domain.SharedContext.ValueObjects;
 using Credence.Domain.UserContext.Entities;
 using Credence.Domain.UserContext.ValueObjects;
@@ -39,7 +38,7 @@ public class LoginHandler(
                           [FromServices] IConfirmationService sendConfirmationService,
                           [FromServices] ILockedUserNotificationService sendNotification,
                           [FromServices] ITwoFactorTokenService sendToken2Fa,
-                          [FromServices] IJwtServices jwtServices,
+                          [FromServices] IJwtWriteTokenServices jwtServices,
                           [FromServices] IRolesServices rolesServices,
                           [FromServices] ITimeProviderServices timeProviderService
                           ) : Notifiable<Notification>, ILoginHandler
@@ -67,7 +66,7 @@ public class LoginHandler(
 
         var expires = TokenExpiresBuilder(isEnable2FA, request.TimeZone);
 
-        string tokenJwt = await jwtServices.GenerateJwtToken(getUser.User ?? null!, expires, await BuilderTokenType(getUser.User ?? null!, isEnable2FA));
+        string tokenJwt = await jwtServices.GenerateJwtToken(getUser.User ?? null!, expires, TokenType(isEnable2FA, isValidPwd.Succeeded));
 
         var getRoles = await rolesServices.GetRolesAsync(getUser.User ?? null!);
 
@@ -81,31 +80,59 @@ public class LoginHandler(
                                                                                     [RoleConst.TwoFactorRolePendingName] : getRoles.ToList(),
                                                                                     Notifications.ToList()) : new LoginResponse().Response(Notifications.ToList());
     }
-    private async Task<ETokenType> BuilderTokenType(User user, bool isEnable2FA)
+    private ETokenType TokenType(bool isEnable2FA, bool isAuthenticated)
     {
-        var isInTwoFactorRole = await rolesServices.IsInRoleAsync(user ?? null!, RoleConst.TwoFactorRolePendingName);
-        var isInAdminRole = await rolesServices.IsInRoleAsync(user ?? null!, RoleConst.AdminRoleName);
 
-        if (isEnable2FA && !isInTwoFactorRole)
-        {
-            await rolesServices.AddUserRoleAsync(user ?? null!, Guid.Parse(RoleConst.TwoFactorPendingIdGuid), Guid.Parse(CompanyConst.CompanyId));
-            return ETokenType.TwoFactorPending;
-        }
+        if (isEnable2FA is false && isAuthenticated is false) return ETokenType.Unauthorized;
 
-        if (isEnable2FA && !isInAdminRole)
-        {
-            await rolesServices.AddUserRoleAsync(user ?? null!, Guid.Parse(RoleConst.AdminRoleName), Guid.Parse(CompanyConst.CompanyId));
-            return ETokenType.AdminAuthenticated;
-        }
 
-        if (isEnable2FA)
-            return ETokenType.TwoFactorPending;
-       
-        if (!isEnable2FA && isInAdminRole)
-            return ETokenType.AdminAuthenticated;
+        return isEnable2FA ? ETokenType.TwoFactorPending : ETokenType.Authenticated;
 
-        return ETokenType.DefaultUser;
+        // if (isEnable2FA && !isInTwoFactorRole)
+        // {
+        //     await rolesServices.AddUserRoleAsync(user ?? null!, Guid.Parse(RoleConst.TwoFactorPendingIdGuid), Guid.Parse(CompanyConst.CompanyId));
+        //     return ETokenType.TwoFactorPending;
+        // }
+
+        // if (isEnable2FA && !isInAdminRole)
+        // {
+        //     await rolesServices.AddUserRoleAsync(user ?? null!, Guid.Parse(RoleConst.AdminRoleName), Guid.Parse(CompanyConst.CompanyId));
+        //     return ETokenType.Authenticated;
+        // }
+
+        // if (isEnable2FA)
+        //     return ETokenType.TwoFactorPending;
+
+        // if (!isEnable2FA && isInAdminRole)
+        //     return ETokenType.Authenticated;
+
+        // return ETokenType.Unauthorized;
     }
+    // private async Task<ETokenType> BuilderTokenType(User user, bool isEnable2FA)
+    // {
+    //     var isInTwoFactorRole = await rolesServices.IsInRoleAsync(user ?? null!, RoleConst.TwoFactorRolePendingName);
+    //     var isInAdminRole = await rolesServices.IsInRoleAsync(user ?? null!, RoleConst.AdminRoleName);
+
+    //     if (isEnable2FA && !isInTwoFactorRole)
+    //     {
+    //         await rolesServices.AddUserRoleAsync(user ?? null!, Guid.Parse(RoleConst.TwoFactorPendingIdGuid), Guid.Parse(CompanyConst.CompanyId));
+    //         return ETokenType.TwoFactorPending;
+    //     }
+
+    //     if (isEnable2FA && !isInAdminRole)
+    //     {
+    //         await rolesServices.AddUserRoleAsync(user ?? null!, Guid.Parse(RoleConst.AdminRoleName), Guid.Parse(CompanyConst.CompanyId));
+    //         return ETokenType.Authenticated;
+    //     }
+
+    //     if (isEnable2FA)
+    //         return ETokenType.TwoFactorPending;
+
+    //     if (!isEnable2FA && isInAdminRole)
+    //         return ETokenType.Authenticated;
+
+    //     return ETokenType.Unauthorized;
+    // }
     private DateTime TokenExpiresBuilder(bool twoFactor, string timeZone)
     {
         var tz = timeProviderService.GetTimeZoneById(timeZone);
@@ -211,7 +238,7 @@ public class LoginHandler(
                                         user.Name?.DisplayName!,
                                         user.Email!);
 
-            AddNotification("User.EmailConfirmed", EmailConst.EmailNotConfirmed);
+            AddNotification(EmailConst.NotePath_01, EmailConst.EmailNotConfirmed);
             await Task.CompletedTask;
         }
         else

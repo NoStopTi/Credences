@@ -28,7 +28,7 @@ public class LoginResponse
         Token = token;
         Email = email;
         UserId = userId;
-         RolesListHandler(roles);
+        RolesListHandler(roles);
     }
     public bool Authenticated { get; private set; }
     public bool IsEnable2FA { get; private set; } = false;
@@ -37,7 +37,6 @@ public class LoginResponse
     public string Email { get; private set; } = string.Empty;
     public Guid UserId { get; private set; }
     public List<string>? Roles { get; private set; }
-
 
     private void RolesListHandler(List<string>? roles)
     {
@@ -49,38 +48,11 @@ public class LoginResponse
         else
             Roles = [];
     }
-
-
-
-    // public List<Notification>? Notifications { get; private set; }
-    // public void AddNotifications(IList<Notification> notifications)
-    // {
-    //     Notifications!.AddRange(notifications);
-    // }
-
-        // private void HandleList(List<string>? roles, List<Notification>? notifications)
-        // {
-        //      
-        //   
-        //   
-        //   
-        //   
-        //   
-
-        //     if (notifications?.Count > 0)
-        //     {
-        //         Notifications = [];
-        //         Notifications!.AddRange(notifications);
-        //     }
-        //     else
-        //         Notifications = [];
-        // }
-
     public Response<LoginResponse> Response(IList<Notification> notifications) => notifications.Any()
-                                            ? new Response<LoginResponse>(BuilderResponse([.. notifications]),StatusCodes.Status400BadRequest)
+                                            ? new Response<LoginResponse>(LoginFailed([.. notifications]), StatusCodes.Status400BadRequest)
                                             : new Response<LoginResponse>();
     public Response<LoginResponse> Response(bool isLoginValid, IList<Notification> notifications) => isLoginValid
-                                            ? new Response<LoginResponse>(BuilderResponse([.. notifications]),StatusCodes.Status400BadRequest)
+                                            ? new Response<LoginResponse>(LoginFailed([.. notifications]), StatusCodes.Status400BadRequest)
                                             : new Response<LoginResponse>();
     public Response<LoginResponse> Response(bool authenticated,
                                                 bool isEnable2FA,
@@ -98,40 +70,14 @@ public class LoginResponse
                                                                     userId,
                                                                     roles,
                                                                     notifications), StatusCodes.Status200OK, $"2FA is {isEnable2FA}");
-    // private LoginResponse BuilderResponse(bool authenticated,
-    //                              bool isEnable2FA,
-    //                              DateTime expires,
-    //                              string token,
-    //                              string email,
-    //                              Guid userId,
-    //                              List<string> roles,
-    //                              List<Notification> notifications
-    //                                                  )
-    // {
-    //     return LoginSucceeded(authenticated,
-    //                       isEnable2FA,
-    //                       expires,
-    //                       token,
-    //                       email,
-    //                       userId,
-    //                       roles,
-    //                       notifications);
-    // }
-
-
-    private LoginResponse BuilderResponse(List<Notification> notifications)
-    {
-        return LoginFailed(notifications);
-    }
-
     private static LoginResponse LoginSucceeded(bool authenticated,
-                                                bool isEnable2FA,
-                                                DateTime expires,
-                                                string token,
-                                                string email,
-                                                Guid userId,
-                                                List<string> roles,
-                                                List<Notification> notifications)
+                                                 bool isEnable2FA,
+                                                 DateTime expires,
+                                                 string token,
+                                                 string email,
+                                                 Guid userId,
+                                                 List<string> roles,
+                                                 List<Notification> notifications)
     {
         return (authenticated || isEnable2FA) ? new LoginResponse(authenticated,
                                                  isEnable2FA,

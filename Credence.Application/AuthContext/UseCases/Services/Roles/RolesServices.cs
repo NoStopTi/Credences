@@ -80,7 +80,11 @@ public class RolesServices : IRolesServices
 
     public async Task<IdentityResult> CreateRoleAsync(RoleRequest role) => await _rolesManager.CreateAsync(new Role { Name = role.Name, DisplayRoleName = role.DisplayRoleName });
 
-    public async Task<bool> AddUserRoleAsync(User user, Guid roleId, Guid companyId) => await _userRoleDefaultRepository.AddUserRoleAsync(user, roleId, companyId);
+    public async Task<bool> AddUserRoleAsync(User user, Guid roleId, Guid companyId) => 
+                                                        await _userRoleDefaultRepository.AddUserRoleAsync(user, roleId, companyId);
 
-    public async Task<bool> AddUserRoleDefaultUSERAsync(UserRole userRole) => await _userRoleDefaultRepository.AddAsync(userRole);
+    public async Task<bool> AddUserRoleDefaultUSERAsync(UserRole userRole) => 
+                                                        await _userRoleDefaultRepository.AddAsync(userRole);
+
+
 }

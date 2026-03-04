@@ -4,7 +4,6 @@ using Credence.Application.SharedContext.Responses;
 using Credence.Default.DomainContext.Entities.Constants.TwoFactorContext;
 using Microsoft.AspNetCore.Mvc;
 using Credence.Application.UserContext.Login.UseCases.Responses;
-using Credence.Default.DomainContext.Entities.Constants.AuthContext;
 
 namespace Credence.Api.Endpoints.TwoFactorContext.Routes;
 
@@ -16,8 +15,7 @@ public class VerifyTokenEndpoint : IEndpoint
                                                                     .WithName(TwoFactorConst.VerifyTokenRoute)
                                                                     .WithDescription(TwoFactorConst.VerifyTokenRouteDesc)
                                                                     .WithOrder(TwoFactorConst.VerifyTokenRouteOrder)
-                                                                    .Produces<Response<LoginResponse>>()
-                                                                    .RequireAuthorization(RoleConst.TwoFactorRolePendingName);
+                                                                    .Produces<Response<LoginResponse>>();
     }
 
     private static async Task<IResult> HandlerAsync(

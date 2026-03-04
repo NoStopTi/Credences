@@ -4,7 +4,7 @@ using Credence.Domain.UserContext.Entities;
 
 namespace Credence.Application.SharedContext.Contracts.Authorization.Jwt;
 
-public interface IJwtServices
+public interface IJwtWriteTokenServices
 {
   Task<string> GenerateJwtToken(
                                  User user,

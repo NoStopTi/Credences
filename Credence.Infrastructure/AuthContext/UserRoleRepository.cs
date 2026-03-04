@@ -22,7 +22,11 @@ public class UserRoleRepository : Repository<UserRole>, IUserRoleRepository
 
         var result =  await _CONTEXT.UserRoles.AddAsync(userRole);
 
-        return result.Entity != null ? true : false;
+        //mudar isso
+
+        return await _CONTEXT.SaveChangesAsync() > 0;
+
+        // return result.Entity != null ? true : false;
     }
 
     public async Task<bool> AddAsync(UserRole userRole)

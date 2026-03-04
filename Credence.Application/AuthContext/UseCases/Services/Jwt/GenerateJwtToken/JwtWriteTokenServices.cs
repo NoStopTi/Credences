@@ -11,9 +11,9 @@ using Credence.Default.DomainContext.Entities.Constants.TwoFactorContext;
 using Credence.Application.AuthContext.UseCases.Services.Jwt.Enums;
 using Credence.Application.AuthContext.UseCases.Services.Jwt.Exceptions;
 
-namespace Credence.Application.AuthContext.UseCases.Services.Jwt.GenerateJwtUserToken;
+namespace Credence.Application.AuthContext.UseCases.Services.Jwt.GenerateJwtToken;
 
-public class JwtServices(IRolesServices rolesServices) : IJwtServices
+public class JwtWriteTokenServices(IRolesServices rolesServices) : IJwtWriteTokenServices
 {
 
 
@@ -67,17 +67,14 @@ public class JwtServices(IRolesServices rolesServices) : IJwtServices
 
         return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
     }
-
-
     private async Task<ClaimsIdentity> BuilderClaimsIdentity(User user, ETokenType tokenType) => tokenType switch
     {
-        ETokenType.AdminAuthenticated =>  await AdminAuthenticated(user),
+        ETokenType.Authenticated => await Authenticated(user),
         ETokenType.TwoFactorPending => TwoFactorPending(user),
-        ETokenType.DefaultUser => DefaultUser(user),
+        ETokenType.Unauthorized => Unauthorized(),
         _ => throw new JwtException(TwoFactorConst.ProviderInvalidError),//Modificar isso 
     };
-
-    private async Task<ClaimsIdentity> AdminAuthenticated(User user)
+    private async Task<ClaimsIdentity> Authenticated(User user)
     {
         var getRoles = await rolesServices.GetRolesAsync(user);
 
@@ -95,24 +92,21 @@ public class JwtServices(IRolesServices rolesServices) : IJwtServices
             claims.AddClaim(new Claim(ClaimTypes.Role, role));
         return claims;
     }
-
     private ClaimsIdentity TwoFactorPending(User user)
     {
         var claims = new ClaimsIdentity(IdentityConstants.TwoFactorUserIdScheme);
 
-        claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
-
-        claims.AddClaim(new Claim(ClaimTypes.Role, RoleConst.TwoFactorRolePendingName));
-
+        claims.AddClaim(new Claim(ClaimTypes.Email, user.Email ?? user.Id.ToString()));
+        // claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
         return claims;
     }
-    private ClaimsIdentity DefaultUser(User user)
+    private ClaimsIdentity Unauthorized()
     {
         var claims = new ClaimsIdentity(IdentityConstants.TwoFactorUserIdScheme);
 
-        claims.AddClaim(new Claim(ClaimTypes.Email, user.Email!));
-        claims.AddClaim(new Claim(ClaimTypes.Name, user.Email!));
+        claims.AddClaim(new Claim(ClaimTypes.Email, JwtConst.InvalidToken!));
 
         return claims;
     }
+
 }

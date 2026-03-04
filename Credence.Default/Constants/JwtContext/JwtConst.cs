@@ -32,6 +32,7 @@ public class JwtConst
     public const string TypeAuthorization = "Bearer";
     public const string BearerFormat = "JWT";
     public const string InvalidToken = "Invalid JWT token.";
+    public const string EmailClaimNotFound = "Email claim not found.";
     #endregion
 
 

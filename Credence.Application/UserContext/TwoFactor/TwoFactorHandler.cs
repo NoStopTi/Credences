@@ -33,7 +33,8 @@ public class TwoFactorHandler(
                                [FromServices] ISetupTwoFactorService setupTwoFactorService,
                                [FromServices] IVerifyCodeService verifyCodeService,
                                [FromServices] IAuthenticateUser authenticateUser,
-                               [FromServices] IJwtServices jwtServices,
+                               [FromServices] IJwtWriteTokenServices jwtServices,
+                               [FromServices] IJwtValidateTokenServices jwtValidateTokenServices,
                                [FromServices] IRolesServices rolesServices,
                                [FromServices] IEnableDisableService enableDisableService,
                                [FromServices] ITimeProviderServices timeProviderService
@@ -60,11 +61,17 @@ public class TwoFactorHandler(
     }
     public async Task<Response<LoginResponse>> VerifyCodeAsync(VerifyTwoFactorRequest request)
     {
-        var user = await GetUserAutenticated();
+        var claimsPrincipal = jwtValidateTokenServices.ExtractClaimsPrincipal(request.Token);
+        
+        var userEmail = jwtValidateTokenServices.ExtractEmailFromPrincipalClaims(claimsPrincipal);
+
+        var user = await userManager.UserManager().FindByEmailAsync(userEmail) ?? null!;
+
+        // var user = await GetUserAutenticated();
 
         return await IsCodeValid(user, request.Provider, request.Code) ? await Authenticated(user, rememberMe: true) :
 
-        new LoginResponse().Response([]);
+        new LoginResponse().Response(Notifications.ToList());
     }
     private async Task<Response<LoginResponse>> Authenticated(User user, bool rememberMe, string timeZone = GlobalConst.PtBr_SP)
     {
@@ -78,7 +85,7 @@ public class TwoFactorHandler(
 
         var expires = TokenExpiresBuilder(timeZone);
 
-        string token = await jwtServices.GenerateJwtToken(user, expires, ETokenType.AdminAuthenticated); // mudar isso
+        string token = await jwtServices.GenerateJwtToken(user, expires, ETokenType.Authenticated);
 
         var roles = await rolesServices.GetRolesAsync(user);
 
@@ -105,6 +112,7 @@ public class TwoFactorHandler(
     }
     public async Task<Response<EnableDisableResponse>> EnableDisableAsync(VerifyCodeEnableDisableRequest request)
     {
+
         var user = await GetUserAutenticated();
 
         return await IsCodeValid(user, request.Provider ?? string.Empty, request.Code)

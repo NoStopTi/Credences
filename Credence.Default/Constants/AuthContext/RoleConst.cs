@@ -24,7 +24,8 @@ public record RoleConst
     public const string AdminRoleName = "admin";
     public const string AdminNormalizedName = "ADMIN";
     public const string AdminDisplayRoleName = "Administrador";
-    //TwoFactorPending
+    
+    //TwoFactor
     public const string TwoFactorPendingIdGuid = "8c1f6b2e-3d4a-4f7c-9b12-6e5a9d3c4f81";
     public const string TwoFactorConcurrencyStampGuid = "b7a3c9f4-2e61-4d8b-a5c2-9f3e7a1d6b80";
     public const string TwoFactorRolePendingName = "two_factor_pending";
