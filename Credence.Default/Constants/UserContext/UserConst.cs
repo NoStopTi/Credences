@@ -19,7 +19,6 @@ public record UserConst
     #endregion
 
     #region ENDPOINT API
-
     public const string GroupRoute = "api/v1/users";
     public const string GroupRouteTag = "Users Manager";
 
@@ -58,7 +57,11 @@ public record UserConst
     public const string LastLoginValue = "LastLogin";
     public const string PasswordChangedAtValue = "PasswordChangedAt";
     public const string LockoutEndValue = "LockoutEnd";
-    public const string UserValidationPath = "UserValidations.ResetLockoutVal";
+    public const string Path_02 = "UserValidations.ResetLockoutVal";
     public const string LockoutFalse = "Lockout is disabled, so the user cannot be blocked.";
+    #endregion
+
+    #region PATHS
+    public const string Path_01 = "FULL PATH: Credence.Application.UserContext.UseCases.Validations CLASS: UserCanAuthenticateValidation METHOD: Validate";
     #endregion
 }

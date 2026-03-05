@@ -22,7 +22,6 @@ public class RegisterUserEndpoint : IEndpoint
                                         ([FromBody] RegisterUserRequest request,
                                         [FromServices] IRegisterHandler handler)
     {
-        // request.UserName = request.Email;
 
         var result = await handler.RegisterAsync(request);
 

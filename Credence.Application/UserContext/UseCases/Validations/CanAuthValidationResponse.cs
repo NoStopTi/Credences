@@ -12,6 +12,6 @@ public class CanAuthValidationResponse
     public ELockoutType LockoutType { get; private set; }
     public TimeSpan? RemainingLockoutTime { get; private set; }
     public static CanAuthValidationResponse UserAccountNotLocked() =>
-                        new CanAuthValidationResponse(ELockoutType.None, TimeSpan.Zero);
+                                                                    new CanAuthValidationResponse(ELockoutType.None, TimeSpan.Zero);
 }
 

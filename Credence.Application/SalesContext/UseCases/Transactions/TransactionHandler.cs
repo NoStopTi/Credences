@@ -181,10 +181,10 @@ public class TransactionHandler(CredenceDbContext context) : ITransactionHandler
 
          await context.Transactions
              .AsNoTracking()
-             .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId)
+                          .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId)
         :
         await context.Transactions
-             .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
+                            .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
     }
 
 }

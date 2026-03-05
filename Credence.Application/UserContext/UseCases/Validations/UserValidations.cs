@@ -24,24 +24,24 @@ public class UserValidations : Notifiable<Notification>, IUserValidations
 
     }
 
-    public bool FullValidation(User user, string source)
-    {
-        new ResetLockoutValidation(user, source);
+    // public bool FullValidation(User user, string source)
+    // {
+    //     new ResetLockoutValidation(user, source);
 
-        user.Name!.Validate(source);
+    //     user.Name!.Validate(source);
 
-        user.LoginOptions!.Validate(source);
+    //     user.LoginOptions!.Validate(source);
 
-        user.PasswordExpire!.Validate(source);
+    //     user.PasswordExpire!.Validate(source);
 
-        user.SendCodeByEmailDisabledAt!.Validate(source);
+    //     user.SendCodeByEmailDisabledAt!.Validate(source);
 
-        user.Image!.Validate(source);
+    //     user.Image!.Validate(source);
 
-        user.Age!.Validate(source);
+    //     user.Age!.Validate(source);
 
-        return IsValid;
-    }
+    //     return IsValid;
+    // }
 
 
 }

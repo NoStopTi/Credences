@@ -24,26 +24,12 @@ public class User : IdentityUser<Guid>
     public Name? Name { get; set; } = null!;
     public LoginOptions? LoginOptions { get; private set; }
     public PasswordExpire? PasswordExpire { get; private set; }
-    public TwoFactor? SendCodeByEmailDisabledAt { get; private set; }
+    public TwoFactorCodeSecondStepByEmail? SendCodeByEmailDisabledAt { get; private set; }
     public Image? Image { get; private set; }
     public Age? Age { get; private set; }
     public Gender? Gender { get; private set; }
     public IReadOnlyCollection<UserCompany>? UserCompanies => _userCompanies!.ToList();
     public IReadOnlyCollection<UserRole>? UserRoles => _userRoles!.ToList();
-
-    // public User CreateUser()
-    // {
-    //     return new User()
-    //     {
-    //         Name
-    //         LoginOptions
-    //         PasswordExpire
-    //         SendCodeByEmailDisabledAt
-    //         Image
-    //         Age
-    //         Gender
-    //     }
-    // }
 
     public void SetLastLogin()
     {
@@ -68,8 +54,6 @@ public class User : IdentityUser<Guid>
     public void Send2FACodeByEmail(bool active) =>
                                                 SendCodeByEmailDisabledAt
                                                 = active
-                                                ? DateTime.UtcNow : DateTime.MinValue;
-
-    
+                                                ? DateTime.UtcNow : DateTime.MinValue;   
 
 }

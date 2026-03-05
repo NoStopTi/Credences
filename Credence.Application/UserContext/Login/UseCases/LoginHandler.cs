@@ -19,9 +19,7 @@ using Credence.Default.Constants.JwtContext;
 using Credence.Default.Constants.PasswordContext;
 using Credence.Default.Constants.UserContext;
 using Credence.Default.DomainContext.Entities.Constants.AuthContext;
-using Credence.Domain.SharedContext.ValueObjects;
 using Credence.Domain.UserContext.Entities;
-using Credence.Domain.UserContext.ValueObjects;
 using Flunt.Notifications;
 using Flunt.Validations;
 
@@ -45,9 +43,7 @@ public class LoginHandler(
 {
     public async Task<Response<LoginResponse>> Login(LoginUserRequest request)
     {
-        RequestValidate(request.Email, request.Password, LoginConst.NotePath_07);
-
-        var getUser = await userGet.EnsureNameOrEmailIsUniqueAsync(request.Email, LoginConst.NotePath_04) ?? null!;
+        var getUser = await userGet.EnsureNameOrEmailIsUniqueAsync(request.Email, LoginConst.Path_04) ?? null!;
 
         await IsEmailConfirm(getUser.User ?? null!);
 
@@ -60,7 +56,7 @@ public class LoginHandler(
 
         CanAuthenticate(isValidPwd.Succeeded, isEnable2FA, getUser.User ?? null!);
 
-        _userValidations.IsValidForLogin(getUser.User ?? null!, LoginConst.NotePath_01);
+        _userValidations.IsValidForLogin(getUser.User ?? null!, LoginConst.Path_01);
 
         await userWrite.SetLastLoginAsync(getUser.User ?? null!);
 
@@ -87,52 +83,7 @@ public class LoginHandler(
 
 
         return isEnable2FA ? ETokenType.TwoFactorPending : ETokenType.Authenticated;
-
-        // if (isEnable2FA && !isInTwoFactorRole)
-        // {
-        //     await rolesServices.AddUserRoleAsync(user ?? null!, Guid.Parse(RoleConst.TwoFactorPendingIdGuid), Guid.Parse(CompanyConst.CompanyId));
-        //     return ETokenType.TwoFactorPending;
-        // }
-
-        // if (isEnable2FA && !isInAdminRole)
-        // {
-        //     await rolesServices.AddUserRoleAsync(user ?? null!, Guid.Parse(RoleConst.AdminRoleName), Guid.Parse(CompanyConst.CompanyId));
-        //     return ETokenType.Authenticated;
-        // }
-
-        // if (isEnable2FA)
-        //     return ETokenType.TwoFactorPending;
-
-        // if (!isEnable2FA && isInAdminRole)
-        //     return ETokenType.Authenticated;
-
-        // return ETokenType.Unauthorized;
     }
-    // private async Task<ETokenType> BuilderTokenType(User user, bool isEnable2FA)
-    // {
-    //     var isInTwoFactorRole = await rolesServices.IsInRoleAsync(user ?? null!, RoleConst.TwoFactorRolePendingName);
-    //     var isInAdminRole = await rolesServices.IsInRoleAsync(user ?? null!, RoleConst.AdminRoleName);
-
-    //     if (isEnable2FA && !isInTwoFactorRole)
-    //     {
-    //         await rolesServices.AddUserRoleAsync(user ?? null!, Guid.Parse(RoleConst.TwoFactorPendingIdGuid), Guid.Parse(CompanyConst.CompanyId));
-    //         return ETokenType.TwoFactorPending;
-    //     }
-
-    //     if (isEnable2FA && !isInAdminRole)
-    //     {
-    //         await rolesServices.AddUserRoleAsync(user ?? null!, Guid.Parse(RoleConst.AdminRoleName), Guid.Parse(CompanyConst.CompanyId));
-    //         return ETokenType.Authenticated;
-    //     }
-
-    //     if (isEnable2FA)
-    //         return ETokenType.TwoFactorPending;
-
-    //     if (!isEnable2FA && isInAdminRole)
-    //         return ETokenType.Authenticated;
-
-    //     return ETokenType.Unauthorized;
-    // }
     private DateTime TokenExpiresBuilder(bool twoFactor, string timeZone)
     {
         var tz = timeProviderService.GetTimeZoneById(timeZone);
@@ -150,17 +101,7 @@ public class LoginHandler(
 
         return result;
     }
-    private void RequestValidate(string email, string pass, string source)
-    {
-        var emailChecked = new Email(email);
-        emailChecked.Validate($"{LoginConst.NotePath_05} - {source}");
-
-        var passwordChecked = new Password(pass);
-        passwordChecked.Validate($"{LoginConst.NotePath_06} - {source}");
-
-        if (!IsValid)
-            throw new LoginExceptions(PasswordConst.PwdOrUserInvalid);
-    }
+  
     private async void CanAuthenticate(bool pwdCheckResult, bool isEnable2FA, User user)
     {
         var isLockedOut = await canAuthenticate.IsLockedOutAsync(user ?? null!);
@@ -238,7 +179,7 @@ public class LoginHandler(
                                         user.Name?.DisplayName!,
                                         user.Email!);
 
-            AddNotification(EmailConst.NotePath_01, EmailConst.EmailNotConfirmed);
+            AddNotification(EmailConst.Path_01, EmailConst.EmailNotConfirmed);
             await Task.CompletedTask;
         }
         else

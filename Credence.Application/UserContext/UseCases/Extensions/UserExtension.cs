@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Credence.Application.UserContext.UseCases.Services;
 using Credence.Application.SharedContext.Contracts.GetUser;
-using Credence.Application.SharedContext.Contracts.Validations;
+// using Credence.Application.SharedContext.Contracts.Validations;
 using Credence.Application.UserContext.UseCases.Validations;
 using Credence.Infrastructure.UserContext;
+using Credence.Application.SharedContext.Contracts.Validations;
 
 namespace Credence.Application.UserContext.UseCases.Extensions;
 

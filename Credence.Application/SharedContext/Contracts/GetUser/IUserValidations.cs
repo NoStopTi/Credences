@@ -7,7 +7,7 @@ namespace Credence.Application.SharedContext.Contracts.GetUser;
 
 public interface IUserValidations
 {
-    bool FullValidation(User user, string source);
+    // bool FullValidation(User user, string source);
     void IsValidForLogin(User user, string source);
     IReadOnlyCollection<Notification>? Notifications {get;}
 

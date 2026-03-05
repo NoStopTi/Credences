@@ -47,11 +47,11 @@ public class TwoFactorHandler(
 
         var getUser = await get.GetByEmail(request.Email, TwoFactorConst.NotePath_01);
 
-        var validations = await userCanAuthenticate.ValidateWithNotifications(getUser!.User ?? null!);
+        var notifications = await userCanAuthenticate.Validate(getUser!.User ?? null!);
 
         var result = await toggleOnOffCodeViaEmailService.OnOffCodeViaEmail(getUser.User ?? null!, request.OnOff);
 
-        return new OnOffCodeViaEmailResponse().BuilderOnOffCodeViaEmailResponse(result ? request.OnOff : result, validations.Count > 0 ? validations.ToList() : []);
+        return new OnOffCodeViaEmailResponse().BuilderOnOffCodeViaEmailResponse(result ? request.OnOff : result, notifications.Count > 0 ? notifications.ToList() : []);
     }
     public async Task<Response<WithAppSetupResponse>> SetupTwoFactor()
     {
@@ -62,12 +62,10 @@ public class TwoFactorHandler(
     public async Task<Response<LoginResponse>> VerifyCodeAsync(VerifyTwoFactorRequest request)
     {
         var claimsPrincipal = jwtValidateTokenServices.ExtractClaimsPrincipal(request.Token);
-        
+
         var userEmail = jwtValidateTokenServices.ExtractEmailFromPrincipalClaims(claimsPrincipal);
 
         var user = await userManager.UserManager().FindByEmailAsync(userEmail) ?? null!;
-
-        // var user = await GetUserAutenticated();
 
         return await IsCodeValid(user, request.Provider, request.Code) ? await Authenticated(user, rememberMe: true) :
 
@@ -96,7 +94,7 @@ public class TwoFactorHandler(
                                              user.Email ?? string.Empty,
                                              user.Id,
                                              roles.ToList(),
-                                             Notifications.ToList());
+                                             Notifications.Count > 0 ? Notifications.ToList() : []);
     }
     private DateTime TokenExpiresBuilder(string timeZone)
     {

@@ -32,7 +32,7 @@ public record EmailConst
     #endregion
     #region ERRORS
     public const string InvalidEmail = "Invalid email address.";
-    public const string NotePath_01 = "User.EmailConfirmed";
+    public const string Path_01 = "User.EmailConfirmed";
     #endregion
 
 
