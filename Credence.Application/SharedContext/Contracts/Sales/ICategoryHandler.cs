@@ -1,4 +1,4 @@
-using Credence.Application.SalesContext.UseCases.Categories.Requests;
+using Credence.Application.SalesContext.Categories.Requests;
 using Credence.Application.SharedContext.Responses;
 using Credence.Domain.SalesContext.Entities;
 using Credence.Infrastructure.SharedContext.UseCases.Responses;

@@ -1,7 +1,7 @@
 using Credence.Domain.SalesContext;
 using Credence.Application.SharedContext.Responses;
 using Credence.Infrastructure.SharedContext.UseCases.Responses;
-using Credence.Application.SalesContext.UseCases.Transactions.Requests;
+using Credence.Application.SalesContext.Transactions.Requests;
 
 namespace Credence.Application.SharedContext.Contracts.Sales;
 

@@ -3,7 +3,7 @@ using Credence.Domain.SalesContext;
 using Microsoft.AspNetCore.Mvc;
 using Credence.Application.SharedContext.Contracts.Sales;
 using Credence.Application.SharedContext.Responses;
-using Credence.Application.SalesContext.UseCases.Transactions.Requests;
+using Credence.Application.SalesContext.Transactions.Requests;
 using Credence.Default.DomainContext.Entities.Constants.SalesContext;
 
 namespace Credence.Api.Endpoints.TransactionsContext.Routes;

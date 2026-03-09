@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using Credence.Infrastructure.SharedContext.UseCases.Responses;
 using Credence.Application.SharedContext.Responses;
 using Credence.Application.SharedContext.Contracts.Sales;
-using Credence.Application.SalesContext.UseCases.Categories.Requests;
+using Credence.Application.SalesContext.Categories.Requests;
 using Credence.Domain.SalesContext.Entities;
 
-namespace Credence.Application.SalesContext.UseCases.Categories;
+namespace Credence.Application.SalesContext.Categories;
 
 public class CategoryHandler(CredenceDbContext context) : ICategoryHandler
 {

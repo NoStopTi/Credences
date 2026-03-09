@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Credence.Application.SharedContext.Contracts.Sales;
 using Credence.Application.SharedContext.Responses;
 using Credence.Infrastructure.SharedContext.UseCases.Responses;
-using Credence.Application.SalesContext.UseCases.Transactions.Requests;
+using Credence.Application.SalesContext.Transactions.Requests;
 
-namespace Credence.Application.SalesContext.UseCases;
+namespace Credence.Application.SalesContext;
 
 
 

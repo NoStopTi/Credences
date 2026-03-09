@@ -5,7 +5,7 @@ using Credence.Domain.SalesContext.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Credence.Application.SharedContext.Contracts.Sales;
 using Credence.Infrastructure.SharedContext.UseCases.Responses;
-using Credence.Application.SalesContext.UseCases.Categories.Requests;
+using Credence.Application.SalesContext.Categories.Requests;
 using Credence.Default.DomainContext.Entities.Constants.SalesContext;
 
 namespace Credence.Api.Endpoints.CategoryContext.Routes;

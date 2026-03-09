@@ -3,10 +3,12 @@ using System.ComponentModel.DataAnnotations;
 using Credence.Application.SharedContext.Requests;
 using Credence.Domain.SalesContext.Enums;
 
-namespace Credence.Application.SalesContext.UseCases.Transactions.Requests;
+namespace Credence.Application.SalesContext.Transactions.Requests;
 
-public class CreateTransactionRequest : Request
+public class UpdateTransactionRequest : Request
 {
+    public Guid Id { get; set; }
+
     [Required(ErrorMessage = "Invalid title")]
     public string Title { get; set; } = string.Empty;
 
