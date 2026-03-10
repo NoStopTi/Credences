@@ -1,5 +1,4 @@
 using Credence.Application.UserContext.UseCases.Register.Extensions;
-using Credence.Application.SalesContext.Extensions;
 using Credence.Application.UserContext.Passwords.UseCases;
 using Credence.Application.UserContext.TwoFactor.Extensions;
 using Credence.Application.SharedContext.Services.Identity.Extensions;
@@ -21,7 +20,7 @@ public static class ServicesDIExtension
         builder.AddLoginServices();
         builder.AddRegisterServices();
         builder.AddJwtRolesServices();
-        builder.AddSalesServices();
+        // builder.AddSalesServices();
         builder.AddPasswordServices();
         builder.AddEmailConfirmationServices();
         builder.AddTwoFactorServices();

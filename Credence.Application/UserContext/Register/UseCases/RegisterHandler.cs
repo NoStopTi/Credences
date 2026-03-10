@@ -14,30 +14,33 @@ using Microsoft.AspNetCore.Mvc;
 namespace Credence.Application.UserContext.Register.UseCases;
 
 public class RegisterHandler([FromServices] IRegisterService userRegister,
-                                 [FromServices] IGetService get,
-                                 [FromServices] IConfirmationService sendConfirmationService
-                                 ) : IRegisterHandler
+                             [FromServices] IGetService get,
+                             [FromServices] IConfirmationService sendConfirmationService) : IRegisterHandler
 {
     public async Task<Response<IReadOnlyCollection<Notification>>> RegisterAsync([FromBody] RegisterUserRequest request)
     {
+
+        //MUDAR ISSO
+        //Retornos com flunt
+        
         try
         {
-            var requestValidate = request.Validate();
+            // var requestValidate = request.Validate();
 
             var getUser = await get.EnsureNameOrEmailIsUniqueAsync(request.Email, RegisterConst.NotePath_01);
 
             if (getUser.User != null)
-                return await SendEmailConfirmationAsync(getUser.User, request.Email, sendConfirmationService, true, requestValidate);
+                return await SendEmailConfirmationAsync(getUser.User, request.Email, sendConfirmationService, true, []);
 
             var result = await userRegister.RegisterUserAsync(request);
 
-            return await SendEmailConfirmationAsync(getUser.User ?? null!, request.Email, sendConfirmationService, result.Data!.Succeeded, requestValidate);
+            return await SendEmailConfirmationAsync(getUser.User ?? null!, request.Email, sendConfirmationService, result.Data!.Succeeded, []);
 
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            return new Response<IReadOnlyCollection<Notification>>(request.Validate(), StatusCodes.Status500InternalServerError, Errors.CreateFail);
+            return new Response<IReadOnlyCollection<Notification>>([], StatusCodes.Status500InternalServerError, Errors.CreateFail);
         }
     }
 

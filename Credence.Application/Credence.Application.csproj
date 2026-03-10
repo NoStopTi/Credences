@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="../Credence.Default/Credence.Default.csproj" />
     <ProjectReference Include="../Credence.Domain/Credence.Domain.csproj" />
+    <PackageReference Include="MediatR" Version="12.5.0" />
     <ProjectReference Include="../Credence.Infrastructure/Credence.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

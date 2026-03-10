@@ -2,12 +2,10 @@ using System.Reflection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Credence.Domain.SalesContext.Entities;
 using Credence.Domain.BusinessContext.Entities;
 using Credence.Domain.CompanyContext.Entities;
 using Credence.Domain.ProfileContext.Entities;
 using Credence.Domain.UserContext.Entities;
-using Credence.Domain.SalesContext;
 using Credence.Domain.AuthContext.Entities;
 // using System.Diagnostics;
 
@@ -23,8 +21,8 @@ public class CredenceDbContext(DbContextOptions<CredenceDbContext> options) : Id
                                                                                 IdentityUserToken<Guid>>
                                                                                 (options)
 {
-    public DbSet<Category> Categories { get; set; } = null!;
-    public DbSet<Transaction> Transactions { get; set; } = null!;
+    // public DbSet<Category> Categories { get; set; } = null!;
+    // public DbSet<Transaction> Transactions { get; set; } = null!;
     public DbSet<Business> Businesses { get; set; } = null!;
     public DbSet<Company> Companies { get; set; } = null!;
     public DbSet<Contact> Contacts { get; set; } = null!;
